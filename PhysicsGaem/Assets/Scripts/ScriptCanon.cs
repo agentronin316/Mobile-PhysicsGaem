@@ -8,6 +8,9 @@ public class ScriptCanon : MonoBehaviour {
     public Image powerBar;
     public Image rotationIndicator;
     public Image ammoMask;
+    public Text progressDisplay;
+    public CameraFollow followScript;
+    public Transform shotSpawn;
 
     public int numShots = 5;
     int shotsRemaining;
@@ -18,7 +21,7 @@ public class ScriptCanon : MonoBehaviour {
     public float minPower = 20f;
 
     [Header("Rotation Settings")]
-    public float cannonRotation = 47f; //Initial cannon angle
+    public float cannonRotation = 45f; //Initial cannon angle
     public float minCannonRotation = 30f; //Minimum cannon angle
     public float maxCannonRotation = 60f; //Maximum cannon angle
     public float rotationSpeed = 10f; //Cannon rotation per click
@@ -28,88 +31,145 @@ public class ScriptCanon : MonoBehaviour {
 
     int numStars;
     int starsCollected = 0;
+    int starRating = 0;
 
     // Use this for initialization
     void Start ()
     {
+        if (shotSpawn == null)
+        {
+            shotSpawn = transform.GetChild(0);
+        }
         inversePowerRange = 1 / (maxPower - minPower);
         powerBar.fillAmount = (power - minPower) * inversePowerRange;
         rotationIndicator.fillAmount = (cannonRotation / 360);
         shotsRemaining = numShots;
         ammoMask.fillAmount = (float)shotsRemaining / numShots;
         numStars = GameObject.FindGameObjectsWithTag("Star").Length;
+        UpdateLevelProgress();
+        followScript = Camera.main.GetComponent<CameraFollow>();
     }
 	
-	// Update is called once per frame
-	void Update ()
+    void OnApplicationPause()
     {
-	    if(Input.GetKeyDown(KeyCode.W))
-        {
-            if (power < maxPower)
-            {
-                power += 1;
-                powerBar.fillAmount = (power - minPower) * inversePowerRange;
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            if (power > minPower)
-            {
-                power -= 1;
-                powerBar.fillAmount = (power - minPower) * inversePowerRange;
-            }
-        }
+        ScriptLevelRatings.SaveData();
+    }
+
+	// Update is called once per frame
+	//void Update ()
+ //   {
+	//    if(Input.GetKeyDown(KeyCode.W))
+ //       {
+ //           IncreasePower();
+ //       }
+ //       else if (Input.GetKeyDown(KeyCode.S))
+ //       {
+ //           DecreasePower();
+ //       }
 
 
-        if (Input.GetKeyDown(KeyCode.A))
+ //       if (Input.GetKeyDown(KeyCode.A))
+ //       {
+ //           IncreaseAngle();
+ //       }
+ //       else if(Input.GetKeyDown(KeyCode.D))
+ //       {
+ //           DecreaseAngle();
+ //       }
+ //       if(Input.GetKeyDown(KeyCode.Space))
+ //       {
+ //           FireCannon();
+ //       }
+	//}
+
+    void UpdateLevelProgress()
+    {
+        progressDisplay.text = starsCollected + " / " + numStars;
+        if(starsCollected / (float)numStars > .9f)
         {
-            if (cannonRotation < maxCannonRotation)
-            {
-                cannonRotation += rotationSpeed;
-                transform.Rotate(Vector3.forward * rotationSpeed);
-                rotationIndicator.fillAmount = (cannonRotation / 360);
-            }
+            starRating = 2;
         }
-        else if(Input.GetKeyDown(KeyCode.D))
+        else if(starsCollected / (float)numStars > .8f)
         {
-            if (cannonRotation > minCannonRotation)
-            {
-                cannonRotation -= rotationSpeed;
-                transform.Rotate(Vector3.back * rotationSpeed);
-                rotationIndicator.fillAmount = (cannonRotation / 360);
-            }
+            starRating = 1;
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+    }
+
+    public void FireCannon()
+    {
+        if (shotsRemaining > 0)
         {
-            if (shotsRemaining > 0)
-            {
-                CannonBalls();
-                shotsRemaining--;
-                ammoMask.fillAmount = (float)shotsRemaining / numShots;
-                
-            }
-            else
-            {
-                Debug.Log("Game Over");
-            }
+            CannonBalls();
+            shotsRemaining--;
+            ammoMask.fillAmount = (float)shotsRemaining / numShots;
         }
-	}
+        else
+        {
+            Debug.Log("Game Over");
+        }
+    }
+
+    public void IncreaseAngle()
+    {
+        if (cannonRotation < maxCannonRotation)
+        {
+            cannonRotation += rotationSpeed;
+            transform.Rotate(Vector3.forward * rotationSpeed);
+            rotationIndicator.fillAmount = (cannonRotation / 360);
+        }
+    }
+
+    public void DecreaseAngle()
+    {
+        if (cannonRotation > minCannonRotation)
+        {
+            cannonRotation -= rotationSpeed;
+            transform.Rotate(Vector3.back * rotationSpeed);
+            rotationIndicator.fillAmount = (cannonRotation / 360);
+        }
+    }
+
+    public void IncreasePower()
+    {
+        if (power < maxPower)
+        {
+            power += 1;
+            powerBar.fillAmount = (power - minPower) * inversePowerRange;
+        }
+    }
+
+    public void DecreasePower()
+    {
+        if (power > minPower)
+        {
+            power -= 1;
+            powerBar.fillAmount = (power - minPower) * inversePowerRange;
+        }
+    }
 
     public void DestroyStar(GameObject star)
     {
         starsCollected++;
         Destroy(star);
+        UpdateLevelProgress();
         if (starsCollected >= numStars)
         {
-            Debug.Log("Winning!");
+            starRating = 3;
+            ShowResults();
         }
     }
 
+    void ShowResults()
+    {
+        GameObject.Find("Canvas").GetComponent<ScriptControls>().DisplayResults(starRating);
+        
+    }
 
     void CannonBalls()
     {
-        GameObject cannonBallInstance = (GameObject)Instantiate(cannonBall, transform.position, Quaternion.identity);
+        GameObject cannonBallInstance = (GameObject)Instantiate(cannonBall, shotSpawn.position, Quaternion.identity);
         cannonBallInstance.GetComponent<Rigidbody2D>().velocity =
             new Vector2(power * Mathf.Cos(cannonRotation * degToRad), power * Mathf.Sin(cannonRotation * degToRad));
+        followScript.shotFired = true;
     }
 }

@@ -11,7 +11,7 @@ public class ScriptMenu : MonoBehaviour {
     public GameObject[] levelButtons;
     
 
-    void Start()
+    void Awake()
     {
         if (PlayerPrefs.GetString("HasPlayed") == "Yes")
         {
@@ -72,5 +72,11 @@ public class ScriptMenu : MonoBehaviour {
     {
         ScriptLevelRatings.currentLevel = levelNumber - 1;
         SceneManager.LoadScene(levelNumber);
+    }
+
+    public void _ResetProgress()
+    {
+        ScriptLevelRatings.Initialize();
+        ScriptLevelRatings.SaveData();
     }
 }

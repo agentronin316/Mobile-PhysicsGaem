@@ -52,7 +52,7 @@ public class ScriptControls : MonoBehaviour {
 
     public void _RestartLevel()
     {
-        SceneManager.LoadScene(ScriptLevelRatings.currentLevel - 1);
+        SceneManager.LoadScene(ScriptLevelRatings.currentLevel + 1);
     }
 
     public void _NextLevel()

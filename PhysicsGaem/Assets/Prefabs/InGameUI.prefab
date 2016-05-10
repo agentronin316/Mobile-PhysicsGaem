@@ -1407,7 +1407,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11452570}
-        m_MethodName: _RestartLevel
+        m_MethodName: _MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1435,6 +1435,7 @@ MonoBehaviour:
   gameplayUI: {fileID: 142218}
   resultsScreen: {fileID: 159766}
   resultsText: {fileID: 11414646}
+  resultsMask: {fileID: 11487726}
 --- !u!114 &11452982
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2164,8 +2165,8 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
 --- !u!114 &11494038

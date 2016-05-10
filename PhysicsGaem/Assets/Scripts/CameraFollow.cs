@@ -11,7 +11,7 @@ public class CameraFollow : MonoBehaviour
     public float ySmooth = 1.5f;
     private Vector2 maxXAndY;
     private Vector2 minXAndY;
-    private bool trackingShot = false;
+    public bool trackingShot = false;
     public bool shotFired = false;
     public Transform player;
     public Transform cannon;
@@ -103,7 +103,10 @@ public class CameraFollow : MonoBehaviour
 
         yield return new WaitForSeconds(1);
         trackingShot = false;
-        Destroy(player.gameObject);
+        if (player != null)
+        {
+            Destroy(player.gameObject);
+        }
     }
 
     

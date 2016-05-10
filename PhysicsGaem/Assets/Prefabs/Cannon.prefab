@@ -80,8 +80,8 @@ MonoBehaviour:
   maxPower: 40
   minPower: 20
   cannonRotation: 45
-  minCannonRotation: 30
-  maxCannonRotation: 60
+  minCannonRotation: 15
+  maxCannonRotation: 75
   rotationSpeed: 10
 --- !u!212 &21208716
 SpriteRenderer:

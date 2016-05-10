@@ -100,18 +100,20 @@ public class ScriptCanon : MonoBehaviour {
 
     public void FireCannon()
     {
-        if (followScript.player == null)
+        if (followScript.player != null)
         {
-            if (shotsRemaining > 0)
-            {
-                CannonBalls();
-                shotsRemaining--;
-                ammoMask.fillAmount = (float)shotsRemaining / numShots;
-            }
-            else
-            {
-                ShowResults();
-            }
+            Destroy(followScript.player.gameObject);
+            followScript.trackingShot = false;
+        }
+        if (shotsRemaining > 0)
+        {
+            CannonBalls();
+            shotsRemaining--;
+            ammoMask.fillAmount = (float)shotsRemaining / numShots;
+        }
+        else
+        {
+            ShowResults();
         }
     }
 

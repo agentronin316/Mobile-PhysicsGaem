@@ -10,6 +10,7 @@ public class ScriptControls : MonoBehaviour {
     public GameObject gameplayUI;
     public GameObject resultsScreen;
     public Text resultsText;
+    public Image resultsMask;
 
     void Start()
     {
@@ -72,6 +73,7 @@ public class ScriptControls : MonoBehaviour {
     {
         gameplayUI.SetActive(false);
         resultsScreen.SetActive(true);
+        resultsMask.fillAmount = starRating / 3f;
         Time.timeScale = 0;
         switch(starRating)
         {

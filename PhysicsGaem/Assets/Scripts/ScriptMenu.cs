@@ -18,7 +18,6 @@ public class ScriptMenu : MonoBehaviour {
             ScriptLevelRatings.LoadData();
             for (int i = 0; i < levelButtons.Length; i++)
             {
-                levelButtons[i].GetComponentInChildren<Image>().fillAmount = ScriptLevelRatings.Ratings[i] / 3f;
                 if (i != levelButtons.Length - 1 && ScriptLevelRatings.Ratings[i] > 0)
                 {
                     levelButtons[i + 1].GetComponent<Button>().interactable = true;
@@ -30,10 +29,11 @@ public class ScriptMenu : MonoBehaviour {
             ScriptLevelRatings.Initialize();
             ScriptLevelRatings.SaveData();
             PlayerPrefs.SetString("HasPlayed", "Yes");
-            for (int i = 0; i < levelButtons.Length; i++)
-            {
-                levelButtons[i].GetComponentInChildren<Image>().fillAmount = 0f;
-            }
+            
+        }
+        for(int i = 0; i < levelButtons.Length; i++)
+        {
+                levelButtons[i].transform.GetChild(0).GetComponent<Image>().fillAmount = ScriptLevelRatings.Ratings[i] / 3f;
         }
         _MainMenu();
     }

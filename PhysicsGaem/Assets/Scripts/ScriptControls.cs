@@ -62,6 +62,12 @@ public class ScriptControls : MonoBehaviour {
         _RestartLevel();
     }
 
+    public void _MainMenu()
+    {
+        ScriptLevelRatings.SaveData();
+        SceneManager.LoadScene(0);
+    }
+
     public void DisplayResults(int starRating)
     {
         gameplayUI.SetActive(false);

@@ -88,11 +88,11 @@ public class ScriptCanon : MonoBehaviour {
     void UpdateLevelProgress()
     {
         progressDisplay.text = starsCollected + " / " + numStars;
-        if(starsCollected / (float)numStars > .9f)
+        if(starsCollected / (float)numStars > .85f)
         {
             starRating = 2;
         }
-        else if(starsCollected / (float)numStars > .8f)
+        else if(starsCollected / (float)numStars > .75f)
         {
             starRating = 1;
         }

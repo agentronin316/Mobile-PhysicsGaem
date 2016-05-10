@@ -12,6 +12,8 @@ public class ScriptCanon : MonoBehaviour {
     public CameraFollow followScript;
     public Transform shotSpawn;
 
+    ScriptControls gameControls;
+
     public int numShots = 5;
     int shotsRemaining;
 
@@ -36,6 +38,7 @@ public class ScriptCanon : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        gameControls = GameObject.Find("Canvas").GetComponent<ScriptControls>();
         if (shotSpawn == null)
         {
             shotSpawn = transform.GetChild(0);
@@ -97,18 +100,22 @@ public class ScriptCanon : MonoBehaviour {
 
     public void FireCannon()
     {
-        if (shotsRemaining > 0)
+        if (followScript.player == null)
         {
-            CannonBalls();
-            shotsRemaining--;
-            ammoMask.fillAmount = (float)shotsRemaining / numShots;
-        }
-        else
-        {
-            Debug.Log("Game Over");
+            if (shotsRemaining > 0)
+            {
+                CannonBalls();
+                shotsRemaining--;
+                ammoMask.fillAmount = (float)shotsRemaining / numShots;
+            }
+            else
+            {
+                ShowResults();
+            }
         }
     }
 
+   
     public void IncreaseAngle()
     {
         if (cannonRotation < maxCannonRotation)

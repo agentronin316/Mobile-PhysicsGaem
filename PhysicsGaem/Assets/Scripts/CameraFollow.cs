@@ -88,7 +88,7 @@ public class CameraFollow : MonoBehaviour
         while (!allSleeping)
         {
             allSleeping = true;
-
+            GOS = FindObjectsOfType(typeof(Rigidbody2D)) as Rigidbody2D[];
             foreach (Rigidbody2D GO in GOS)
             {
                 if (!GO.IsSleeping())

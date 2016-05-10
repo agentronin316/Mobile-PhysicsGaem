@@ -52,6 +52,7 @@ public class ScriptControls : MonoBehaviour {
 
     public void _RestartLevel()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(ScriptLevelRatings.currentLevel + 1);
     }
 
